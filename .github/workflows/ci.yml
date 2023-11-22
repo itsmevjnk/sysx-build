@@ -1,0 +1,146 @@
+name: CI
+
+on:
+  create:
+    branches:
+      - release/**
+  push:
+    branches:
+    - main
+    - dev/**
+  pull_request:
+    branches:
+    - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+
+permissions:
+  contents: write
+  pull-requests: write
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: recursive
+
+    - name: Install prerequisites
+      run: |
+        sudo apt install -y nasm genisoimage
+        GCC_VERSION=13.2.0
+        curl -SLOJ https://newos.org/toolchains/i386-elf-$GCC_VERSION-Linux-x86_64.tar.xz
+        tar -xf i386-elf-$GCC_VERSION-Linux-x86_64.tar.xz
+        echo "$GITHUB_WORKSPACE/i386-elf-$GCC_VERSION-Linux-x86_64/bin" >> $GITHUB_PATH
+
+    - name: Build x86
+      run: |
+        ./configure.sh x86
+        HOST=i386-elf ./build.sh
+
+    - name: Upload x86 artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: sysx_x86
+        path: packer/x86/sysx.iso
+
+  build_v86:
+    runs-on: ubuntu-latest
+
+    # Based on https://github.com/copy/v86/blob/master/.github/workflows/ci.yml
+    steps:
+    - name: Checkout v86
+      uses: actions/checkout@v4
+      with:
+        repository: copy/v86
+        path: v86
+
+    - name: Setup toolchain
+      run: |
+        rustup toolchain install stable --profile minimal
+        rustup target add wasm32-unknown-unknown
+        rustup component add rustfmt
+
+    - name: Install APT packages
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install nasm gdb qemu-system-x86 libc6-dev-i386 -y
+
+    - name: Build all
+      run: |
+        pushd v86
+        make all
+        make build/xterm.js build/capstone-x86.min.js build/libwabt.js
+        make update_version
+        popd
+
+    - name: Upload the artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: v86
+        path: |
+          v86/build/*.js
+          v86/build/*.js.map
+          v86/build/*.wasm
+          v86/build/*.css
+          v86/*.html
+          v86/*.css
+          v86/bios/*
+          v86/LICENSE
+
+  deploy:
+    needs: [build, build_v86]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Download SysX artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: sysx_x86
+        path: preview_x86
+
+    - name: Download v86 artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: v86
+        path: preview_x86
+
+    - name: Customize page
+      run: |
+        mv -f preview_x86/index.html preview_x86/emulate.html
+        mv -f preview_x86/LICENSE preview_x86/LICENSE_v86
+        echo '
+          <html>
+            <head>
+              <title>SysX Live Preview</title>
+              <script>
+                location.href="emulate.html?profile=custom&cdrom.url=sysx.iso"
+              </script>
+            </head>
+          </html>
+        ' > preview_x86/index.html
+
+    - name: Deploy sample to GitHub pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      if: ${{ github.ref == 'refs/heads/main' }}
+      with:
+        folder: preview_x86
+        clean-exclude: pr-preview/
+        force: false
+
+    - name: Deploy sample PR preview
+      uses: rossjrw/pr-preview-action@v1
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        source-dir: preview_x86

@@ -5,6 +5,10 @@ This repository contains build scripts for SysX.
 
 For the kernel itself, check out the [sysx](https://github.com/itsmevjnk/sysx) repo.
 
+## Preview
+
+A live preview of SysX is available [here](https://itsmevjnk.github.io/sysx-build/).
+
 ## Instructions
 
 ### Prerequisites
