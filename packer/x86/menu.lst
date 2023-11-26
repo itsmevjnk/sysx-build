@@ -3,3 +3,7 @@ default 0
 title SysX
 kernel /kernel.elf
 module /initrd.tar
+
+title SysX (override PS/2 keyboard ID and scancode set, useful for v86)
+kernel /kernel.elf i8042_p0id=ffff i8042_p0scs=1
+module /initrd.tar
