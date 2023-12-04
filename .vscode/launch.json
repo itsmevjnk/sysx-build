@@ -1,0 +1,42 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch x86 with GDB",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/kernel/kernel.elf",
+            "cwd": "${workspaceRoot}",
+            "args": [],
+            "sourceFileMap": {
+
+            },
+            "targetArchitecture": "x86",
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb-multiarch",
+            "miDebuggerArgs": "",
+            "customLaunchSetupCommands": [
+                {
+                    "text": "target remote localhost:1234",
+                    "description": "Connect to QEMU remote debugger"
+                }
+            ],
+            "setupCommands": [
+                {
+                    "text": "file ${workspaceRoot}/kernel/kernel.elf",
+                    "description": "Load kernel binary"
+                },
+                {
+                    "text": "b exc_stub",
+                    "description": "Set breakpoint on exception handler stub"
+                },
+                {
+                    "text": "b kinit",
+                    "description": "Set breakpoint on kernel init"
+                }
+            ],
+            "preLaunchTask": "GDB: Emulate x86",
+            "logging": { "engineLogging": true }
+        }
+    ]
+}

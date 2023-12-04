@@ -1,0 +1,30 @@
+{
+    "configurations": [
+        {
+            "name": "x86",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceRoot}/kernel/lib/**",
+                "${workspaceRoot}/kernel/**"
+            ],
+            "defines": [
+                "DEBUG",
+                "ARCH_MEMSET",
+                "ARCH_MEMSET16",
+                "ARCH_MEMSET32",
+                "ARCH_MEMCPY",
+                "KINIT_MM_FIRST",
+                "TERM_VGATEXT",
+                "KSTDERR_SER"
+            ],
+            "compilerPath": "/usr/bin/i686-elf-gcc", // you might want to change the compiler path to where your toolchain is!
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x86",
+            "compilerArgs": [
+                "-ffreestanding"
+            ]
+        }
+    ],
+    "version": 4
+}

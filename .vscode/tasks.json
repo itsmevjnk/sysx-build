@@ -1,0 +1,70 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build SysX",
+            "type": "shell",
+            "linux": {
+                "command": "bash ${workspaceRoot}/build.sh"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "Emulate SysX",
+            "type": "shell",
+            "linux": {
+                "command": "bash ${workspaceRoot}/emulate.sh"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Clean build tree",
+            "type": "shell",
+            "linux": {
+                "command": "bash ${workspaceRoot}/clean.sh"
+            }
+        },
+        {
+            "label": "GDB: Emulate x86",
+            "type": "shell",
+            "linux": {
+                "command": "bash ${workspaceRoot}/.vscode/qemu_x86_dbg.sh \"${workspaceRoot}/packer/x86/sysx.iso\""
+            },
+            "isBackground": true,
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "line": 1,
+                            "column": 1,
+                            "message": 1,
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": {
+                            "regexp": "^Starting QEMU:"
+                        },
+                        "endsPattern": {
+                            "regexp": "."
+                        }
+                    }
+                }
+            ],
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Build SysX"
+            ]
+        }
+    ]
+}
