@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceRoot}/kernel/lib/**",
-                "${workspaceRoot}/kernel/**"
+                "${workspaceRoot}/kernel/**",
+                "${workspaceRoot}/kernel/drivers/lai/**"
             ],
             "defines": [
                 "DEBUG",
@@ -15,7 +16,9 @@
                 "ARCH_MEMCPY",
                 "KINIT_MM_FIRST",
                 "TERM_VGATEXT",
-                "KSTDERR_SER"
+                "KSTDERR_SER",
+                "FEAT_PCI",
+                "FEAT_ACPI_LAI"
             ],
             "compilerPath": "/usr/bin/i686-elf-gcc", // you might want to change the compiler path to where your toolchain is!
             "cStandard": "c17",
