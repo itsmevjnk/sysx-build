@@ -33,18 +33,30 @@ jobs:
         fetch-depth: 0
         submodules: recursive
 
+    - name: Download toolchain
+      id: dl-toolchain
+      uses: robinraju/release-downloader@v1.8
+      with:
+        repository: 'itsmevjnk/gnu-toolchain'
+        latest: true
+        tag: 'i686-elf'
+        fileName: '*.tar.xz'
+        tarBall: false
+        zipBall: false
+
     - name: Install prerequisites
+      env:
+        TOOLCHAIN_ARCHIVE: ${{ fromJson(steps.dl-toolchain.outputs.downloaded_files)[0] }}
       run: |
         sudo apt install -y nasm genisoimage
-        GCC_VERSION=13.2.0
-        curl -SLOJ https://newos.org/toolchains/i386-elf-$GCC_VERSION-Linux-x86_64.tar.xz
-        tar -xf i386-elf-$GCC_VERSION-Linux-x86_64.tar.xz
-        echo "$GITHUB_WORKSPACE/i386-elf-$GCC_VERSION-Linux-x86_64/bin" >> $GITHUB_PATH
-
+        tar -xf $TOOLCHAIN_ARCHIVE
+        TOOLCHAIN_DIR=`echo $TOOLCHAIN_ARCHIVE | sed 's/.tar.xz//'`
+        echo "$GITHUB_WORKSPACE/$TOOLCHAIN_DIR/bin" >> $GITHUB_PATH
+        
     - name: Build x86
       run: |
         ./configure.sh x86
-        HOST=i386-elf ./build.sh
+        ./build.sh
 
     - name: Upload x86 artifact
       uses: actions/upload-artifact@v3
