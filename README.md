@@ -1,4 +1,7 @@
-# sysx-build
+# Build environment and scripts for SysX
+
+[![Discord Invite](https://dcbadge.vercel.app/api/server/vsvQbdf9Mv?style=flat)](https://discord.gg/vsvQbdf9Mv)
+
 SysX - an Unix-like operating system designed with portability in mind.
 
 This repository contains build scripts for SysX.
@@ -42,3 +45,7 @@ HOST=i386-elf ./build.sh
 ```
 
 - The output files are located at `packer/$(TARGET)`. `packer/$(TARGET)/sysx.iso` is the bootable image.
+
+## Community
+
+Need help using this project? Join me on [Discord](https://discord.gg/vsvQbdf9Mv), and let's find a solution together.
