@@ -16,7 +16,7 @@
                 "ARCH_MEMCPY",
                 "KINIT_MM_FIRST",
                 "TERM_VGATEXT",
-                "KSTDERR_SER",
+                "KSTDERR_INIT_SEPARATE",
                 "FEAT_PCI",
                 "FEAT_ACPI_LAI"
             ],

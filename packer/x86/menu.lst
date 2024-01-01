@@ -4,6 +4,10 @@ title SysX
 kernel /kernel.elf
 module /initrd.tar
 
+title SysX (kstderr redirected to serial)
+kernel /kernel.elf kstderr=serial
+module /initrd.tar
+
 title SysX (v86 - no ACPI, override PS/2 keyboard ID and scancode set)
-kernel /kernel.elf i8042_p0id=ffff i8042_p0scs=1 acpi=off
+kernel /kernel.elf i8042_p0id=ffff i8042_p0scs=1 acpi=off kstderr=serial
 module /initrd.tar
