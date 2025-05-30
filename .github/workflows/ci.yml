@@ -103,7 +103,7 @@ jobs:
       with:
         name: v86
         path: |
-          package.json
+          v86/package.json
           v86/build/*.js
           v86/build/*.js.map
           v86/build/*.wasm
