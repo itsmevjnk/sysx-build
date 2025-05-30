@@ -18,10 +18,17 @@
                 "TERM_VGATEXT",
                 "KSTDERR_INIT_SEPARATE",
                 "FEAT_PCI",
-                "FEAT_ACPI_LAI"
+                "FEAT_ACPI_LAI",
+                "USE_DL_PREFIX",
+                "MORECORE=kmorecore",
+                "MORECORE_CANNOT_TRIM",
+                "LACKS_UNISTD_H",
+                "LACKS_SYS_PARAM_H",
+                "HAVE_MMAP=0",
+                "MALLOC_FAILURE_ACTION=\"while(0)\""
             ],
             "compilerPath": "/usr/bin/i686-elf-gcc", // you might want to change the compiler path to where your toolchain is!
-            "cStandard": "c17",
+            "cStandard": "c11",
             "cppStandard": "gnu++17",
             "intelliSenseMode": "linux-gcc-x86",
             "compilerArgs": [
