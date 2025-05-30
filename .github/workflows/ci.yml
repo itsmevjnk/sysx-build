@@ -74,6 +74,13 @@ jobs:
         repository: copy/v86
         path: v86
 
+    - name: Setup Node.js version
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        check-latest: true
+        registry-url: 'https://registry.npmjs.org'
+
     - name: Setup toolchain
       run: |
         rustup toolchain install stable --profile minimal
@@ -89,8 +96,6 @@ jobs:
       run: |
         pushd v86
         make all
-        make build/xterm.js build/capstone-x86.min.js build/libwabt.js
-        make update_version
         popd
 
     - name: Upload the artifact
@@ -98,6 +103,7 @@ jobs:
       with:
         name: v86
         path: |
+          package.json
           v86/build/*.js
           v86/build/*.js.map
           v86/build/*.wasm
